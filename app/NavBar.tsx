@@ -21,7 +21,7 @@ const links = [
           <AiFillBug />
         </Link>
         <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-          <div className="hidden sm:ml-6 sm:block">
+          <div className="sm:ml-6 ">
             <ul className="  flex space-x-6">
               {links.map((link) => (
                 <li key={link.href}>
