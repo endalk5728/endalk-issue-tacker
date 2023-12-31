@@ -3,7 +3,7 @@ import { useForm, SubmitHandler } from "react-hook-form"
 
 import { Controller } from "react-hook-form"
 
-import { Button,Callout } from "@radix-ui/themes";
+import { Button,Callout,Text } from "@radix-ui/themes";
 import {Input} from "@nextui-org/react";
 //import { Button } from '@nextui-org/react';
  import SimpleMDE from "react-simplemde-editor";
@@ -11,14 +11,13 @@ import {Input} from "@nextui-org/react";
 import "easymde/dist/easymde.min.css";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createIssueSchema } from "@/app/createIssueSchema";
+import {z  }from 'zod'
 
 
 
-
-type IssueForm = {
- title: string
-  description: string
-}
+type IssueForm =z.infer<typeof createIssueSchema>;
 
 
 export default function App() {
@@ -27,8 +26,9 @@ export default function App() {
     register,
     control,
     handleSubmit,
+    formState:{errors}
   
-  } = useForm <IssueForm>();
+  } = useForm <IssueForm>({resolver:zodResolver(createIssueSchema)});
 
 const  [error,setError]=useState('');
 
@@ -56,13 +56,13 @@ const  [error,setError]=useState('');
    
       <Input  type="text" placeholder="Enter your title" {...register('title')}/>
 
-      
+      {errors.title && <Text color='red' as='p'>{errors.title.message}</Text>}
       <Controller
     name="description"
     control={control}
     render={({field})=><SimpleMDE placeholder="description"{...field}/>}
 />
-      
+      {errors.description &&<Text color='red' as='p'>{errors.description.message}</Text>}
 
       <Button type="submit"> submit new issue</Button>  
     </form>
